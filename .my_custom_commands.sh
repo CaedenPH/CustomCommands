@@ -3,38 +3,53 @@
 bold=$(tput bold)
 normal=$(tput sgr0)
 red='\033[0;31m'
-indent='    '
-
+indent="        "
 help="
 ${bold}ccall help
 \n${normal}run ccall help with --help
 \n
 \n${bold}how to use:\n
-    ${indent}${normal}ccall targetdirectory --options
-\n${bold}options:\n
-    ${indent}${normal}--help: gives help
-
+$indent ${normal}ccall targetdirectory --options
+\n\n${bold}options:\n
+$indent ${normal}--help: shows help    
+${normal}--target=default: changes default cursor target
+${normal}--ignore
 "
 invalid_option="
 ${bold}Invalid target directory. Type --help for more information
 "
+OPTION=""
+DEFAULT="default"
+no_default="There is no default cursor in the directory. Create an image in the directory for the default or set --default=default. Type --help for more information"
 
 function ccall() {
-    if [[  $1 == '' ]]; then 
-        echo -e $help  
-        return        
-    elif [[ $1 == '--help' ]]; then
-        echo - e $help
+    for i in "$@"
+    do
+    case $i in
+        --default=*)
+        DEFAULT="${i#*=}"
+        ;;
+        --help)
+        echo -e $help
         return
-    fi
+        ;;
+
+    esac
+    done
 
     if [[ ! -d $1 ]]; then
-        echo -e $invalid_option
+        echo $invalid_option 
         return
-
+    fi
+    
+    if [[ ! -f "./$1/$DEFAULT" ]]; then
+    echo $no_default
+    return
     fi
 
+
     echo 'cloning backup...'
+    
 
     origin_dir=$1
     temp_dir='tmp'
@@ -50,12 +65,12 @@ function ccall() {
     cd $temp_dir
 
     for file in *; do 
-        if [ "$file" = "default" ]; then
+        if [ "$file" = $DEFAULT ]; then
             continue 
         fi
         if [ -f "$file" ]; then 
             rm $file
-            ln -s default $file  
+            ln -s $DEFAULT $file  
             echo $file '--> Done'  
         fi 
         done
@@ -70,6 +85,7 @@ function ccall() {
 
 
 }
+
 
 function gp(){
     msg='idk'
@@ -108,7 +124,41 @@ function runtest() {
     # if [[ ! -d "./test/.git" ]]; then echo e 
     # fi
 
-    if [[ ! $1 ]]; then ls && echo e
+    # if [[ ! $1 ]]; then ls && echo e
+    # fi
+
+    # case $1 in 
+
+    #     e)
+    #     echo 'x'
+    #     ;;
+
+    # esac
+    # OPTION=""
+    # DEFAULT=""
+    # HELP=""
+
+    # for i in "$@"
+    # do
+    # case $i in
+    #     --option=*)
+    #     OPTION="${i#*=}"
+    #     ;;
+    #     --default=*)
+    #     DEFAULT="${i#*=}"
+    #     ;;
+    #     --help)
+    #     HELP="yes"
+    #     ;;
+    #     *)
+    #     HELP="yes"
+
+    # esac
+    # done
+    # echo $OPTION, $DEFAULT, $HELP 
+
+    if [[ -f "./cursors/default" ]]; then echo 'e'
     fi
 
 }
+
