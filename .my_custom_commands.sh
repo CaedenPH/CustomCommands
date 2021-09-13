@@ -157,8 +157,33 @@ function runtest() {
     # done
     # echo $OPTION, $DEFAULT, $HELP 
 
-    if [[ -f "./cursors/default" ]]; then echo 'e'
-    fi
+    # if [[ -f "./cursors/default" ]]; then echo 'e'
+    # fi
 
+    # for i in *; do
+
+    #     if [[ ! -x $i ]]; then
+    #     echo $i
+    #     fi
+    # done
+
+    echo w
+}
+
+function modall() {
+    shopt -s dotglob
+    for i in *; do  
+        case $i in 
+            *.sh)
+                if [[ ! -x $i ]]; then
+                chmod +x $i
+                echo $i
+            fi
+            ;;
+            *)
+            ;;
+
+        esac
+    done
 }
 
