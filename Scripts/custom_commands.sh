@@ -22,7 +22,7 @@ OPTION=""
 DEFAULT="default"
 no_default="There is no default cursor in the directory. Create an image in the directory for the default or set --default=default. Type --help for more information"
 
-function ccall() {
+ccall() {
     for i in "$@"
     do
     case $i in
@@ -87,7 +87,7 @@ function ccall() {
 }
 
 
-function gp(){
+gp(){
     msg='idk'
     if [[ ! -d "./.git" ]]; then 
         echo 'Not a dir'
@@ -109,7 +109,7 @@ function gp(){
 
 }
 
-function runtest() {
+runtest() {
     # if [[  $1 == '' ]]; then 
     #     echo nice 
     # elif [[ $1 == '--help' ]]; then
@@ -167,10 +167,21 @@ function runtest() {
     #     fi
     # done
 
-    echo w
+    # if ls ; then
+    # # Here, we test that the return code of `ls` was zero, if not we print some warning
+    # printf "ls failed, that's a very rare things to happen!" >&2
+    # exit 1
+    # fi
+
+    # opts=("$@")
+    # echo $opts
+
+    if [[ -z $1 ]]; then 
+    echo e  
+    fi
 }
 
-function modall() {
+modall() {
     shopt -s dotglob
     for i in *; do  
         case $i in 
@@ -187,3 +198,36 @@ function modall() {
     done
 }
 
+up() { 
+    current="$(pwd)"
+    cd ~/Github/CustomCommands/Scripts/
+    for i in *; do 
+	source $i
+    done
+    cd $current
+
+}
+
+runcode() { 
+    cd ~/Github/CustomCommands
+    num=0
+
+    while [[ ! $func ]]; do
+        letters="$(python randomletters.py)"
+        if ! $letters; then 
+            echo "Command worked! command was $letters on take $num"
+            return  
+        fi
+        let "num+=1"
+    echo eee
+    done
+
+}
+
+spamcuscool() {
+    for i in `seq 0 1000000`; do
+        output="$(python randomoutput.py)"
+        echo "Generating file --> $output"
+
+    done
+}

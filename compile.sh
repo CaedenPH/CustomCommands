@@ -1,9 +1,11 @@
-"Copying files..."
+#!/bin/bash
 
-cp .my_custom_commands.sh ~
+echo "Copying files..."
+
+cp ./Scripts/custom_commands.sh ~
 cd
 
-"Writing to bashrc..."
-echo "source .my_custom_commands.sh" >> .bashrc
+echo "Writing to bashrc..."
+echo "source custom_commands.sh" >> .bashrc
 
-echo "Completed"
+echo "Finished with exit code 0"
