@@ -176,9 +176,11 @@ runtest() {
     # opts=("$@")
     # echo $opts
 
-    if [[ -z $1 ]]; then 
-    echo e  
-    fi
+    # if [[ -z $1 ]]; then 
+    # echo e  
+    # fi
+
+    echo $@
 }
 
 modall() {
@@ -230,4 +232,63 @@ spamcuscool() {
         echo "Generating file --> $output"
 
     done
+}
+
+search() {
+    query=$1
+    opts=""
+    help="options are file-only and dir-only"
+    dir=''
+    file=''
+    ignore=''
+
+    for i in "$@"
+    do
+    case $i in
+        $query)
+        continue
+        ;;
+
+        --file-only)
+        opts="file"
+        file="."
+        ;;
+
+        --dir-only)
+        dir='.'
+        opts="directory"
+        ;;
+
+        --ignore=*)
+        ignore="${i#*=}"
+        ;;
+
+        --help)
+        echo $help
+        ;;
+
+        *--*)
+        echo -e "${bold}WARNING: no such option - ignoring. use --help\n $normal"
+        ;;
+
+        *)
+        echo -e "${bold}WARNING: only accepts one input (filename/directoryname) - ignoring. use --help\n $normal"
+        ;;
+
+
+    esac
+    done
+
+    if [[ ! $1  ]]; then 
+        echo "${bold}QUITTING: Requires a file/directory to be specified"
+        return
+    fi
+
+    if [[ $dir && $file ]];
+        then echo "${bold}QUITTING: you can only choose one dir or file only"
+        return
+    fi
+
+    file="$(python searchfile.py $query $opts ignore=$ignore)"
+    echo -e $file
 }
